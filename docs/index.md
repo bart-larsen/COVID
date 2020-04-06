@@ -1,1 +1,0 @@
-CovidPlot.html
