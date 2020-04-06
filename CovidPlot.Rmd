@@ -14,7 +14,7 @@ Below, I plot the daily progression of cases per capita and the daily change in 
 1. Philly (me)  
 2. Cook (Ben)  
 3. Hennepin (Sydney)  
-4. Collier (Mom and Larry)
+4. Collier (Mom and Larry)  
 5. Sumter (Bonnie's parents)
 
 ```{r setup, include=FALSE, warning=FALSE}
@@ -76,7 +76,6 @@ cook_lockdown_days <- as.numeric(cook_lockdown - d1s$mind[d1s$county=="Cook"])
 hennepin_lockdown_days <- as.numeric(hennepin_lockdown - d1s$mind[d1s$county=="Hennepin"])
 collier_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Collier"])
 sumter_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Sumter"])
-
 
 ```
 
