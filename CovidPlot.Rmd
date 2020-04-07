@@ -29,7 +29,7 @@ setwd('/Users/larsenb/Documents/BenProjects/covid19/')
 ```
 
 
-```{r prepare data, include=FALSE}
+```{r prepare data, echo=FALSE}
 covid_data <- read.csv('/Users/larsenb/Documents/BenProjects/covid19/covid-19-data/us-counties.csv')
 covid_data$date<-as.Date(covid_data$date)
 
@@ -188,7 +188,7 @@ knitr::include_graphics("covid_plot.png")
 
 ### Cool video :)
 Animation of cases per capita.  
-```{r animation,echo=FALSE}
+```{r animation,echo=FALSE,message=FALSE}
 anim <- cases + transition_reveal(date)
 anim_save("/Users/larsenb/Documents/BenProjects/covid19/cases_animation.gif",animation = anim,renderer = gifski_renderer())
 knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_animation.gif")
@@ -197,7 +197,7 @@ knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_anim
 ## Looking by date of "first" case
 Now the same curves are plotted as a function of days since "first" case, rather than date. The reason there are quotes around "first" is that we are ignoring the two cases that Chicago had between Jan 24 and Feb 29.  
 Note the 
-```{r first_case, echo=FALSE,warning=FALSE}
+```{r first_case, echo=FALSE,warning=FALSE,message=FALSE}
 cases <- ggplot(data = covid_data,aes(x=days_since_first_case,y=cases_per_capita,fill=county,color = county)) +
   geom_point() + geom_line() +
   scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
