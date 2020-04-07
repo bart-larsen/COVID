@@ -15,7 +15,7 @@ Below, I plot the daily progression of cases per capita and the daily change in 
 2. Cook (Ben)  
 3. Hennepin (Sydney)  
 4. Collier (Mom and Larry)  
-5. Sumter (Bonnie's parents)
+5. Sumter (Bonnie's parents)  
 
 ```{r setup, include=FALSE, warning=FALSE}
 library(tidyverse)
@@ -77,6 +77,8 @@ hennepin_lockdown_days <- as.numeric(hennepin_lockdown - d1s$mind[d1s$county=="H
 collier_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Collier"])
 sumter_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Sumter"])
 
+recent_date = max(covid_data$date)
+cat(sprintf("\nMost recent data: %s\n",recent_date))
 ```
 
 ```{r plots, warning=FALSE,echo=FALSE}
