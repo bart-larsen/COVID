@@ -1,8 +1,7 @@
 #!/bin/bash
-pushd .
 cd ~/Documents/BenProjects/covid19/covid-19-data
 git pull
-popd
+cd ~/Documents/BenProjects/covid19/
 
 R -e "rmarkdown::render('CovidPlot.Rmd',output_file='CovidPlot.html')"
 
