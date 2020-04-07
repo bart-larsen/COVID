@@ -8,3 +8,5 @@ cp CovidPlot.html docs/index.html
 
 git add --all
 git commit -m "daily update"
+
+open -a "Google Chrome" https://bart-larsen.github.io/COVID/
