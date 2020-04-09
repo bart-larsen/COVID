@@ -20,6 +20,7 @@ Below, I plot the daily progression of cases per capita and the daily change in 
 ```{r setup, include=FALSE, warning=FALSE}
 library(tidyverse)
 library(cowplot)
+library(scales)
 library(lubridate)
 library(gganimate)
 library(gifski)
@@ -50,6 +51,10 @@ covid_data$population[covid_data$county == "Philadelphia"] <- philly_population
 covid_data$population[covid_data$county == "Hennepin"] <- hennepin_population
 covid_data$population[covid_data$county == "Collier"] <- collier_population
 covid_data$population[covid_data$county == "Sumter"] <- sumter_population
+
+ggplot(data=covid_data,aes(x = reorder(county,-population), y = population)) +
+  geom_bar(stat = "identity") + scale_y_continuous(labels = comma) +
+  ylab("Population") + xlab("County")
 
 covid_data <- covid_data %>%
   mutate(cases_per_capita = cases/population) %>%
