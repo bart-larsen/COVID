@@ -33,12 +33,18 @@ setwd('/Users/larsenb/Documents/BenProjects/covid19/')
 ```{r prepare data, echo=FALSE}
 covid_data <- read.csv('/Users/larsenb/Documents/BenProjects/covid19/covid-19-data/us-counties.csv')
 covid_data$date<-as.Date(covid_data$date)
+population_data <- read.csv('co-est2019-alldata.csv')
+population_data$CTYNAME <- str_replace(population_data$CTYNAME," County","")
+covid_data <- covid_data %>% left_join(population_data %>% select(STNAME,CTYNAME,POPESTIMATE2019),by = c("state"="STNAME","county" = "CTYNAME"))
+covid_data$population <- covid_data$POPESTIMATE2019
 
 covid_data <- covid_data %>%
   filter(!(county=="Cook" & state != "Illinois")) %>% 
   filter(!(county == "Sumter"&state != "Florida")) %>%
   filter(county %in% c("Philadelphia","Cook","Hennepin","Collier","Sumter")) %>%
   filter(date > as.Date("2020-02-29"))
+
+
 
 cook_population <- 5211000
 philly_population <- 1581000
@@ -54,7 +60,7 @@ covid_data$population[covid_data$county == "Sumter"] <- sumter_population
 
 ggplot(data=covid_data,aes(x = reorder(county,-population), y = population)) +
   geom_bar(stat = "identity") + scale_y_continuous(labels = comma) +
-  ylab("Population") + xlab("County")
+  ylab("Population") + xlab("County") + ggtitle("Population of each county")
 
 covid_data <- covid_data %>%
   mutate(cases_per_capita = cases/population) %>%
