@@ -30,7 +30,7 @@ setwd('/Users/larsenb/Documents/BenProjects/covid19/')
 ```
 
 
-```{r prepare data, echo=FALSE}
+```{r prepare data, echo=FALSE, warning=FALSE}
 covid_data <- read.csv('/Users/larsenb/Documents/BenProjects/covid19/covid-19-data/us-counties.csv')
 covid_data$date<-as.Date(covid_data$date)
 population_data <- read.csv('co-est2019-alldata.csv')
@@ -44,21 +44,19 @@ covid_data <- covid_data %>%
   filter(county %in% c("Philadelphia","Cook","Hennepin","Collier","Sumter")) %>%
   filter(date > as.Date("2020-02-29"))
 
+# cook_population <- 5211000
+# philly_population <- 1581000
+# hennepin_population <- 1252000
+# collier_population <- 372345
+# sumter_population <- 132985
+# 
+# covid_data$population[covid_data$county == "Cook"] <- cook_population
+# covid_data$population[covid_data$county == "Philadelphia"] <- philly_population
+# covid_data$population[covid_data$county == "Hennepin"] <- hennepin_population
+# covid_data$population[covid_data$county == "Collier"] <- collier_population
+# covid_data$population[covid_data$county == "Sumter"] <- sumter_population
 
-
-cook_population <- 5211000
-philly_population <- 1581000
-hennepin_population <- 1252000
-collier_population <- 372345
-sumter_population <- 132985
-
-covid_data$population[covid_data$county == "Cook"] <- cook_population
-covid_data$population[covid_data$county == "Philadelphia"] <- philly_population
-covid_data$population[covid_data$county == "Hennepin"] <- hennepin_population
-covid_data$population[covid_data$county == "Collier"] <- collier_population
-covid_data$population[covid_data$county == "Sumter"] <- sumter_population
-
-ggplot(data=covid_data,aes(x = reorder(county,-population), y = population)) +
+ggplot(data=covid_data,aes(x = reorder(county,-population), y = population, fill = county)) +
   geom_bar(stat = "identity") + scale_y_continuous(labels = comma) +
   ylab("Population") + xlab("County") + ggtitle("Population of each county")
 
