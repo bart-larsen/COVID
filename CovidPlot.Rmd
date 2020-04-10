@@ -44,6 +44,11 @@ covid_data <- covid_data %>%
   filter(county %in% c("Philadelphia","Cook","Hennepin","Collier","Sumter")) %>%
   filter(date > as.Date("2020-02-29"))
 
+philly_color = "#66c2a5"
+cook_color = "#fc8d62"
+hennepin_color = "#8da0cb"
+collier_color = "#e78ac3"
+sumter_color = "#a6d854"
 # cook_population <- 5211000
 # philly_population <- 1581000
 # hennepin_population <- 1252000
@@ -58,6 +63,7 @@ covid_data <- covid_data %>%
 
 ggplot(data=covid_data,aes(x = reorder(county,-population), y = population, fill = county)) +
   geom_bar(stat = "identity") + scale_y_continuous(labels = comma) +
+  scale_fill_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
   ylab("Population") + xlab("County") + ggtitle("Population of each county")
 
 covid_data <- covid_data %>%
@@ -91,18 +97,6 @@ cat(sprintf("\nMost recent data: %s\n",recent_date))
 ```
 
 ```{r plots, warning=FALSE,echo=FALSE}
-philly_color = "#66c2a5"
-cook_color = "#fc8d62"
-hennepin_color = "#8da0cb"
-collier_color = "#e78ac3"
-sumter_color = "#a6d854"
-# ggplot(data = covid_data,aes(x=date,y=cases_per_capita,fill=county,color=county, label= ifelse(deaths>0,paste(deaths,"deaths",sep=" "),""))) +
-#   geom_point() + geom_line() + geom_smooth(se = F,alpha = .5) +
-#   scale_color_manual(values = c(cook_color,hennepin_color,philly_color)) +
-#   geom_vline(xintercept = philly_lockdown,color=philly_color) +
-#   geom_vline(xintercept = cook_lockdown,color = cook_color) +
-#   geom_vline(xintercept = hennepin_lockdown,color = hennepin_color) +
-#   geom_text(nudge_y = .00001,show.legend = F)
 
 cases <- ggplot(data = covid_data,aes(x=date,y=cases_per_capita,fill=county,color = county)) +
   geom_point() + geom_line() +
