@@ -1,5 +1,5 @@
 ---
-title: "Covid"
+title: "COVID-19"
 author: "Bart"
 date: "3/27/2020"
 output:
@@ -31,6 +31,10 @@ setwd('/Users/larsenb/Documents/BenProjects/covid19/')
 
 
 ```{r prepare data, echo=FALSE, warning=FALSE}
+# Print date
+recent_date = max(covid_data$date)
+cat(sprintf("\nMost recent data: %s\n",recent_date))
+
 covid_data <- read.csv('/Users/larsenb/Documents/BenProjects/covid19/covid-19-data/us-counties.csv')
 covid_data$date<-as.Date(covid_data$date)
 population_data <- read.csv('co-est2019-alldata.csv')
@@ -60,8 +64,10 @@ sumter_color = "#a6d854"
 # covid_data$population[covid_data$county == "Hennepin"] <- hennepin_population
 # covid_data$population[covid_data$county == "Collier"] <- collier_population
 # covid_data$population[covid_data$county == "Sumter"] <- sumter_population
-
-ggplot(data=covid_data,aes(x = reorder(county,-population), y = population, fill = county)) +
+pop_summary <- covid_data %>%
+  group_by(state,county)%>%
+  summarize(population = mean(population,na.rm=T))
+ggplot(data=pop_summary,aes(x = reorder(county,-population), y = population, fill = county)) +
   geom_bar(stat = "identity") + scale_y_continuous(labels = comma) +
   scale_fill_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
   ylab("Population") + xlab("County") + ggtitle("Population of each county")
@@ -91,9 +97,6 @@ cook_lockdown_days <- as.numeric(cook_lockdown - d1s$mind[d1s$county=="Cook"])
 hennepin_lockdown_days <- as.numeric(hennepin_lockdown - d1s$mind[d1s$county=="Hennepin"])
 collier_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Collier"])
 sumter_lockdown_days <- as.numeric(florida_lockdown - d1s$mind[d1s$county=="Sumter"])
-
-recent_date = max(covid_data$date)
-cat(sprintf("\nMost recent data: %s\n",recent_date))
 ```
 
 ```{r plots, warning=FALSE,echo=FALSE}
