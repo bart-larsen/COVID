@@ -31,10 +31,6 @@ setwd('/Users/larsenb/Documents/BenProjects/covid19/')
 
 
 ```{r prepare data, echo=FALSE, warning=FALSE}
-# Print date
-recent_date = max(covid_data$date)
-cat(sprintf("\nMost recent data: %s\n",recent_date))
-
 covid_data <- read.csv('/Users/larsenb/Documents/BenProjects/covid19/covid-19-data/us-counties.csv')
 covid_data$date<-as.Date(covid_data$date)
 population_data <- read.csv('co-est2019-alldata.csv')
@@ -47,6 +43,10 @@ covid_data <- covid_data %>%
   filter(!(county == "Sumter"&state != "Florida")) %>%
   filter(county %in% c("Philadelphia","Cook","Hennepin","Collier","Sumter")) %>%
   filter(date > as.Date("2020-02-29"))
+
+# Print date
+recent_date = max(covid_data$date)
+cat(sprintf("\nMost recent data: %s\n",recent_date))
 
 philly_color = "#66c2a5"
 cook_color = "#fc8d62"
