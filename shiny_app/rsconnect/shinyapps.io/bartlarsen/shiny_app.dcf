@@ -5,6 +5,6 @@ account: bartlarsen
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2226470
-bundleId: 3127833
+bundleId: 3147102
 url: https://bartlarsen.shinyapps.io/shiny_app/
-when: 1589120907.88071
+when: 1589465201.4999
