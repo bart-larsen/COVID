@@ -109,7 +109,7 @@ cases <- ggplot(data = covid_data,aes(x=date,y=cases_per_capita,fill=county,colo
   geom_vline(xintercept = florida_lockdown,color = collier_color) +
   geom_text(aes(x=florida_lockdown-1, y=.8*max(cases_per_capita),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  labs(y = "Cases per capita",x="Days since first case",title = "COVID-19 cases")
+  labs(y = "Cases per capita",x="Date",title = "COVID-19 cases")
 
 
 dtCases <- ggplot(data = covid_data,aes(x=date,y=daily_change,color = county)) +
@@ -127,7 +127,7 @@ dtCases <- ggplot(data = covid_data,aes(x=date,y=daily_change,color = county)) +
   geom_vline(xintercept = florida_lockdown,color = collier_color) +
   geom_text(aes(x=florida_lockdown-1, y=.8*max(daily_change,na.rm = T),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  labs(y = "Daily change (per capita)",x="Days since first case",title = "Change in COVID-19 cases")
+  labs(y = "Daily change (per capita)",x="Date",title = "Change in COVID-19 cases")
 
 deaths <- ggplot(data = covid_data,aes(x=date,y=deaths_per_capita,fill=county,color = county)) +
   geom_point() + geom_line() +
@@ -144,7 +144,7 @@ deaths <- ggplot(data = covid_data,aes(x=date,y=deaths_per_capita,fill=county,co
   geom_vline(xintercept = florida_lockdown,color = collier_color) +
   geom_text(aes(x=florida_lockdown-1, y=.8*max(deaths_per_capita),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  labs(y = "Deaths per capita",x="Days since first case",title = "COVID-19 deaths")
+  labs(y = "Deaths per capita",x="Date",title = "COVID-19 deaths")
 
 
 dtDeaths <- ggplot(data = covid_data,aes(x=date,y=daily_change_deaths,color = county)) +
@@ -162,7 +162,7 @@ dtDeaths <- ggplot(data = covid_data,aes(x=date,y=daily_change_deaths,color = co
   geom_vline(xintercept = florida_lockdown,color = collier_color) +
   geom_text(aes(x=florida_lockdown-1, y=.8*max(daily_change_deaths,na.rm = T),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  labs(y = "Daily change (per capita)",x="Days since first case",title = " Change in COVID-19 deaths")
+  labs(y = "Daily change (per capita)",x="Date",title = " Change in COVID-19 deaths")
   
 
 # compile into one figure
@@ -317,50 +317,43 @@ knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/deaths_ani
 cases <- ggplot(data = covid_data,aes(x=date,y=case_percent,fill=county,color = county)) +
   geom_point() + geom_line() +
   scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
-  geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
-  geom_text(aes(x=philly_lockdown_days-1, y=.8*max(case_percent),label="Philly lockdown"), 
+  geom_vline(xintercept = philly_lockdown,color=philly_color,show.legend = T) + 
+  geom_text(aes(x=philly_lockdown-1, y=.8*max(case_percent),label="Philly lockdown"), 
             colour=philly_color, angle=90) +
-  geom_vline(xintercept = cook_lockdown_days,color = cook_color) + 
-  geom_text(aes(x=cook_lockdown_days-1, y=.8*max(case_percent),label="Cook lockdown"), 
+  geom_vline(xintercept = cook_lockdown,color = cook_color) + 
+  geom_text(aes(x=cook_lockdown-1, y=.8*max(case_percent),label="Cook lockdown"), 
             colour=cook_color, angle=90) +
-  geom_vline(xintercept = hennepin_lockdown_days,color = hennepin_color) +
-  geom_text(aes(x=hennepin_lockdown_days-1, y=.8*max(case_percent),label="Hennepin lockdown"), 
+  geom_vline(xintercept = hennepin_lockdown,color = hennepin_color) +
+  geom_text(aes(x=hennepin_lockdown-1, y=.8*max(case_percent),label="Hennepin lockdown"), 
             colour=hennepin_color, angle=90) +
-  geom_vline(xintercept = collier_lockdown_days,color = collier_color) +
-  geom_text(aes(x=collier_lockdown_days-1, y=.8*max(case_percent),label="Florida lockdown"), 
+  geom_vline(xintercept = florida_lockdown,color = collier_color) +
+  geom_text(aes(x=florida_lockdown-1, y=.8*max(case_percent),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
-  geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(case_percent),label="Florida lockdown"), 
-            colour=sumter_color, angle=90) +
-  labs(y = "Percent of max cases",x="Date",title = "COVID-19 cases")
-
+  labs(y = "Percent of total cases",x="Date",title = "COVID-19 cases")
 
 deaths <- ggplot(data = covid_data,aes(x=date,y=death_percent,fill=county,color = county)) +
   geom_point() + geom_line() +
   scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
-  geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
-  geom_text(aes(x=philly_lockdown_days-1, y=.8*max(death_percent),label="Philly lockdown"), 
+  geom_vline(xintercept = philly_lockdown,color=philly_color,show.legend = T) + 
+  geom_text(aes(x=philly_lockdown-1, y=.8*max(death_percent),label="Philly lockdown"), 
             colour=philly_color, angle=90) +
-  geom_vline(xintercept = cook_lockdown_days,color = cook_color) + 
-  geom_text(aes(x=cook_lockdown_days-1, y=.8*max(death_percent),label="Cook lockdown"), 
+  geom_vline(xintercept = cook_lockdown,color = cook_color) + 
+  geom_text(aes(x=cook_lockdown-1, y=.8*max(death_percent),label="Cook lockdown"), 
             colour=cook_color, angle=90) +
-  geom_vline(xintercept = hennepin_lockdown_days,color = hennepin_color) +
-  geom_text(aes(x=hennepin_lockdown_days-1, y=.8*max(death_percent),label="Hennepin lockdown"), 
+  geom_vline(xintercept = hennepin_lockdown,color = hennepin_color) +
+  geom_text(aes(x=hennepin_lockdown-1, y=.8*max(death_percent),label="Hennepin lockdown"), 
             colour=hennepin_color, angle=90) +
-  geom_vline(xintercept = collier_lockdown_days,color = collier_color) +
-  geom_text(aes(x=collier_lockdown_days-1, y=.8*max(death_percent),label="Florida lockdown"), 
+  geom_vline(xintercept = florida_lockdown,color = collier_color) +
+  geom_text(aes(x=florida_lockdown-1, y=.8*max(death_percent),label="Florida lockdown"), 
             colour=collier_color, angle=90) +
-  geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
-  geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(death_percent),label="Florida lockdown"), 
-            colour=sumter_color, angle=90) +
-  labs(y = "Percent of max deaths",x="Date",title = "COVID-19 deaths")
+  labs(y = "Percent of total cases",x="Date",title = "COVID-19 deaths")
 
 
 # compile into one figure
 combo_plot <- cowplot::plot_grid(
   cases +  theme(legend.position="none"), 
-  deaths + theme(legend.position="none"), 
-  labels = "AUTO",nrow = 2)
+  deaths + theme(legend.position="none"),  
+  labels = "AUTO",nrow = 1)
 
 county_legend <- cowplot::get_legend(
   cases + 
@@ -368,7 +361,7 @@ county_legend <- cowplot::get_legend(
     theme(legend.position = "bottom")
 )
 
-combo_plot <- plot_grid(combo_plot, county_legend, ncol = 1, rel_heights = c(1, .1))
+combo_plot <- plot_grid(combo_plot, county_legend, rel_heights = c(1, .1),ncol = 1)
 
 cowplot::save_plot(filename = "covid_plot_3.png",plot = combo_plot,base_height = 8, base_width = 8)
 knitr::include_graphics("covid_plot_3.png")
