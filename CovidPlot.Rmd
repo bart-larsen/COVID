@@ -314,7 +314,7 @@ knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/deaths_ani
 
 
 ```{r max_case, echo=FALSE,warning=FALSE,message=FALSE}
-cases <- ggplot(data = covid_data,aes(x=days_since_first_case,y=case_percent,fill=county,color = county)) +
+cases <- ggplot(data = covid_data,aes(x=date,y=case_percent,fill=county,color = county)) +
   geom_point() + geom_line() +
   scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
   geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
@@ -335,7 +335,7 @@ cases <- ggplot(data = covid_data,aes(x=days_since_first_case,y=case_percent,fil
   labs(y = "Percent of max cases",x="Days since first case",title = "COVID-19 cases")
 
 
-deaths <- ggplot(data = covid_data,aes(x=days_since_first_case,y=death_percent,fill=county,color = county)) +
+deaths <- ggplot(data = covid_data,aes(x=date,y=death_percent,fill=county,color = county)) +
   geom_point() + geom_line() +
   scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
   geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
@@ -374,11 +374,11 @@ cowplot::save_plot(filename = "covid_plot_3.png",plot = combo_plot,base_height =
 knitr::include_graphics("covid_plot_3.png")
 
  ## animate
-anim <- cases + transition_reveal(days_since_first_case)
+anim <- cases + transition_reveal(date)
 anim_save("/Users/larsenb/Documents/BenProjects/covid19/cases_animation3.gif",animation = anim,renderer = gifski_renderer())
 knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_animation3.gif")
 
-anim <- deaths + transition_reveal(days_since_first_case)
+anim <- deaths + transition_reveal(date)
 anim_save("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation3.gif",animation = anim,renderer = gifski_renderer())
 knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation3.gif")
 
