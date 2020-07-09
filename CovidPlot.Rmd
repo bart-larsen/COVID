@@ -53,17 +53,7 @@ cook_color = "#fc8d62"
 hennepin_color = "#8da0cb"
 collier_color = "#e78ac3"
 sumter_color = "#a6d854"
-# cook_population <- 5211000
-# philly_population <- 1581000
-# hennepin_population <- 1252000
-# collier_population <- 372345
-# sumter_population <- 132985
-# 
-# covid_data$population[covid_data$county == "Cook"] <- cook_population
-# covid_data$population[covid_data$county == "Philadelphia"] <- philly_population
-# covid_data$population[covid_data$county == "Hennepin"] <- hennepin_population
-# covid_data$population[covid_data$county == "Collier"] <- collier_population
-# covid_data$population[covid_data$county == "Sumter"] <- sumter_population
+
 pop_summary <- covid_data %>%
   group_by(state,county)%>%
   summarize(population = mean(population,na.rm=T))
@@ -83,13 +73,16 @@ hennepin_lockdown <- as.Date("2020-03-24")
 florida_lockdown <- as.Date("2020-04-01")
 
 drv <- function(x) c(NA, diff(x))
-first_date <- function(x,y) min(x[y==min(y)],na.rm=T)
+case_threshold <- 10 #Controls when to start counting days
+first_date <- function(x,y) min(x[y>=case_threshold],na.rm=T)
 
 covid_data <- covid_data %>%
   group_by(county) %>%
   mutate(daily_change = drv(cases_per_capita)) %>%
   mutate(daily_change_deaths = drv(deaths_per_capita)) %>%
-  mutate(days_since_first_case = as.numeric(date - first_date(date,cases)))
+  mutate(days_since_first_case = as.numeric(date - first_date(date,cases)))%>%
+  mutate(case_percent = (cases/max(cases,na.rm=T))*100)%>%
+  mutate(death_percent = (deaths/max(deaths,na.rm = T))*100)
 
 d1s <- covid_data %>% summarise(mind = min(date))
 philly_lockdown_days <- as.numeric(philly_lockdown - d1s$mind[d1s$county=="Philadelphia"])
@@ -200,9 +193,9 @@ anim_save("/Users/larsenb/Documents/BenProjects/covid19/cases_animation.gif",ani
 knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_animation.gif")
 ```
 
-## Looking by date of "first" case
-Now the same curves are plotted as a function of days since "first" case, rather than date. The reason there are quotes around "first" is that we are ignoring the two cases that Chicago had between Jan 24 and Feb 29.  
-Note the 
+## Looking by date of 10 cases
+Now the same curves are plotted as a function of days since case count reached 10 cases, rather than date. 
+
 ```{r first_case, echo=FALSE,warning=FALSE,message=FALSE}
 cases <- ggplot(data = covid_data,aes(x=days_since_first_case,y=cases_per_capita,fill=county,color = county)) +
   geom_point() + geom_line() +
@@ -314,5 +307,79 @@ knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_anim
 anim <- deaths + transition_reveal(days_since_first_case)
 anim_save("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation2.gif",animation = anim,renderer = gifski_renderer())
 knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation2.gif")
+
+```
+
+## Normalized by max cases
+
+
+```{r first_case, echo=FALSE,warning=FALSE,message=FALSE}
+cases <- ggplot(data = covid_data,aes(x=days_since_first_case,y=case_percent,fill=county,color = county)) +
+  geom_point() + geom_line() +
+  scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
+  geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
+  geom_text(aes(x=philly_lockdown_days-1, y=.8*max(case_percent),label="Philly lockdown"), 
+            colour=philly_color, angle=90) +
+  geom_vline(xintercept = cook_lockdown_days,color = cook_color) + 
+  geom_text(aes(x=cook_lockdown_days-1, y=.8*max(case_percent),label="Cook lockdown"), 
+            colour=cook_color, angle=90) +
+  geom_vline(xintercept = hennepin_lockdown_days,color = hennepin_color) +
+  geom_text(aes(x=hennepin_lockdown_days-1, y=.8*max(case_percent),label="Hennepin lockdown"), 
+            colour=hennepin_color, angle=90) +
+  geom_vline(xintercept = collier_lockdown_days,color = collier_color) +
+  geom_text(aes(x=collier_lockdown_days-1, y=.8*max(case_percent),label="Florida lockdown"), 
+            colour=collier_color, angle=90) +
+  geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
+  geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(case_percent),label="Florida lockdown"), 
+            colour=sumter_color, angle=90) +
+  labs(y = "Percent of max cases",x="Days since first case",title = "COVID-19 cases")
+
+
+deaths <- ggplot(data = covid_data,aes(x=days_since_first_case,y=death_percent,fill=county,color = county)) +
+  geom_point() + geom_line() +
+  scale_color_manual(values = c(collier_color,cook_color,hennepin_color,philly_color,sumter_color)) +
+  geom_vline(xintercept = philly_lockdown_days,color=philly_color,show.legend = T) + 
+  geom_text(aes(x=philly_lockdown_days-1, y=.8*max(death_percent),label="Philly lockdown"), 
+            colour=philly_color, angle=90) +
+  geom_vline(xintercept = cook_lockdown_days,color = cook_color) + 
+  geom_text(aes(x=cook_lockdown_days-1, y=.8*max(death_percent),label="Cook lockdown"), 
+            colour=cook_color, angle=90) +
+  geom_vline(xintercept = hennepin_lockdown_days,color = hennepin_color) +
+  geom_text(aes(x=hennepin_lockdown_days-1, y=.8*max(death_percent),label="Hennepin lockdown"), 
+            colour=hennepin_color, angle=90) +
+  geom_vline(xintercept = collier_lockdown_days,color = collier_color) +
+  geom_text(aes(x=collier_lockdown_days-1, y=.8*max(death_percent),label="Florida lockdown"), 
+            colour=collier_color, angle=90) +
+  geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
+  geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(death_percent),label="Florida lockdown"), 
+            colour=sumter_color, angle=90) +
+  labs(y = "Percent of max deaths",x="Days since first case",title = "COVID-19 deaths")
+
+
+# compile into one figure
+combo_plot <- cowplot::plot_grid(
+  cases +  theme(legend.position="none"), 
+  deaths + theme(legend.position="none"), 
+  labels = "AUTO",nrow = 2)
+
+county_legend <- cowplot::get_legend(
+  cases + 
+    guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom")
+)
+
+combo_plot <- plot_grid(combo_plot, county_legend, ncol = 1, rel_heights = c(1, .1))
+
+cowplot::save_plot(filename = "covid_plot_3.png",plot = combo_plot,base_height = 8, base_width = 8)
+knitr::include_graphics("covid_plot_3.png")
+
+ ## animate
+anim <- cases + transition_reveal(days_since_first_case)
+anim_save("/Users/larsenb/Documents/BenProjects/covid19/cases_animation3.gif",animation = anim,renderer = gifski_renderer())
+knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/cases_animation3.gif")
+
+anim <- deaths + transition_reveal(days_since_first_case)
+anim_save("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation3.gif",animation = anim,renderer = gifski_renderer())
+knitr::include_graphics("/Users/larsenb/Documents/BenProjects/covid19/deaths_animation3.gif")
 
 ```
