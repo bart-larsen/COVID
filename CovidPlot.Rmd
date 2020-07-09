@@ -332,7 +332,7 @@ cases <- ggplot(data = covid_data,aes(x=date,y=case_percent,fill=county,color = 
   geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
   geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(case_percent),label="Florida lockdown"), 
             colour=sumter_color, angle=90) +
-  labs(y = "Percent of max cases",x="Days since first case",title = "COVID-19 cases")
+  labs(y = "Percent of max cases",x="Date",title = "COVID-19 cases")
 
 
 deaths <- ggplot(data = covid_data,aes(x=date,y=death_percent,fill=county,color = county)) +
@@ -353,7 +353,7 @@ deaths <- ggplot(data = covid_data,aes(x=date,y=death_percent,fill=county,color 
   geom_vline(xintercept = sumter_lockdown_days,color = sumter_color) +
   geom_text(aes(x=sumter_lockdown_days-1, y=.8*max(death_percent),label="Florida lockdown"), 
             colour=sumter_color, angle=90) +
-  labs(y = "Percent of max deaths",x="Days since first case",title = "COVID-19 deaths")
+  labs(y = "Percent of max deaths",x="Date",title = "COVID-19 deaths")
 
 
 # compile into one figure
